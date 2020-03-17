@@ -8,7 +8,7 @@
     <title>Trello</title>
 </head>
 
-<body onload="getBoards()">
+<body onload="getBoards()" class="overflow-auto">
     <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href="#">My Trello Board</a>
 
@@ -24,7 +24,7 @@
 
     </br>
 
-    <div id="listContainer" style="overflow-y: hidden;">
+    <div id="listContainer" class="overflow-auto">
     </div>
 
     <!-- Add Card Modal  -->
@@ -53,6 +53,32 @@
         </div>
     </div>
 
+    <!-- Edit Card Modal  -->
+    <div class="modal fade" id="editCardModal" tabindex="-1" role="dialog" aria-labelledby="editCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCardModalLabel">Update Card</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Title:</label>
+                            <textarea class="form-control" id="editCardTitle"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="editCard" class="btn btn-primary">Update Name</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js "></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js " integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 " crossorigin="anonymous "></script>
@@ -66,15 +92,14 @@
             getLists(boardId);
         });
     </script>
+
     <script>
         $('#addCardModal').on('show.bs.modal', function(event) {
-            console.log("inside func")
             var button = $(event.relatedTarget)
             var listID = button.data('whatever')
             var modal = $(this)
 
             document.getElementById("addCard").onclick = function() {
-                console.log("inside func")
                 var title = $('#cardTitle').val();
                 if (title.trim() == '') {
                     alert('Please enter card title.');
@@ -84,7 +109,23 @@
                     addCardFunc(title, listID)
                 }
             }
+        })
 
+        $('#editCardModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var cardID = button.data('whatever')
+            var modal = $(this)
+
+            document.getElementById("editCard").onclick = function() {
+                var newTitle = $('#editCardTitle').val();
+                if (newTitle.trim() == '') {
+                    alert('Please enter new card title.');
+                    $('#editCardTitle').focus();
+                    return false;
+                } else {
+                    updateCardFunc(newTitle, cardID)
+                }
+            }
         })
     </script>
 </body>

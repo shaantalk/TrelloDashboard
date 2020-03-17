@@ -1,7 +1,7 @@
 // Common variables 
 var trelloApiUrl = "https://api.trello.com/1/";
-var apiKey = "<YOUR API KEY>";
-var token = "<YOUR API TOKEN>"
+var apiKey = "3d9105f7e1f1b9861bd282ec7693fc50";
+var token = "3f69d36462cd6b5fb8a99b36c97cc646c5f60a518a1a5c11219c24ee09492b79"
 
 // Step 1 : Get boards and append it to dropdown 
 var getBoards = function() {
@@ -64,11 +64,12 @@ var getCards = function(listId, listName) {
 // Step 4 : Draw the list
 var drawList = function(cards, listName) {
     for (var i = 0; i < cards.length; i++) {
-        var $card = $(`<div class="col-md-2"><div class="card text-white bg-secondary mb-3" style="max-width: 18rem;"><div class="card-header">` + cards[i].name + `</div><div class="card-body"><button class="btn btn-danger" onClick="deleteCardFunc('` + cards[i].id + `')">Delete</button></div></div></div>`);
+        var $card = $(`<div class="col-md-2"><div class="card text-white bg-secondary mb-3" style="max-width: 18rem;"><div class="card-header">` + cards[i].name + `</div><div class="card-body"><button class="btn btn-danger" onClick="deleteCardFunc('` + cards[i].id + `')">Delete</button><button type="button" class="btn btn-info" data-toggle="modal" data-target="#editCardModal" data-whatever="` + cards[i].id + `">Update Card</button></div></div></div>`);
         $("#" + listName.replace(' ', '')).append($card);
     }
 }
 
+// Step 5 : Add a new card to a list
 var addCardFunc = function(title, listID) {
     var getCardsUrl = trelloApiUrl + "cards?key=" + apiKey + "&token=" + token + "&name=" + title + "&idList=" + listID;
     $.ajax({
@@ -84,10 +85,27 @@ var addCardFunc = function(title, listID) {
     });
 }
 
+// Step 6 : Delete a card
 var deleteCardFunc = function(cardID) {
     var deleteCardUrl = trelloApiUrl + "cards/" + cardID + "?key=" + apiKey + "&token=" + token;
     $.ajax({
         type: "DELETE",
+        async: false,
+        url: deleteCardUrl,
+        success: function() {
+            location.reload()
+        },
+        error: function() {
+            console.log('Cannot delete card');
+        }
+    });
+}
+
+// Step 6 : Update card name
+var updateCardFunc = function(newTitle, cardID) {
+    var deleteCardUrl = trelloApiUrl + "cards/" + cardID + "/name?key=" + apiKey + "&token=" + token + "&value=" + newTitle;
+    $.ajax({
+        type: "PUT",
         async: false,
         url: deleteCardUrl,
         success: function() {
