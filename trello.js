@@ -1,7 +1,7 @@
 // Common variables 
 var trelloApiUrl = "https://api.trello.com/1/";
-var apiKey = "3d9105f7e1f1b9861bd282ec7693fc50";
-var token = "3f69d36462cd6b5fb8a99b36c97cc646c5f60a518a1a5c11219c24ee09492b79"
+var apiKey = "<YOUR API KEY>";
+var token = "<YOUR API TOKEN>"
 
 // Step 1 : Get boards and append it to dropdown 
 var getBoards = function() {
@@ -50,7 +50,7 @@ var getCards = function(listId, listName) {
         async: false,
         url: getCardsUrl,
         success: function(cards) {
-            console.log(cards)
+            // console.log(cards)
             var $list = $('<div class="row mx-5" id="' + listName.replace(' ', '') + '"><div class="col-md-12"><h2 class="d-inline text-center">' + listName + '</h2><button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#addCardModal" data-whatever="' + listId + '">Add Card</button></div></div><hr>');
             $("#listContainer").append($list);
             drawList(cards, listName);
@@ -64,7 +64,7 @@ var getCards = function(listId, listName) {
 // Step 4 : Draw the list
 var drawList = function(cards, listName) {
     for (var i = 0; i < cards.length; i++) {
-        var $card = $('<div class="col-md-2"><div class="card text-white bg-secondary mb-3" style="max-width: 18rem;"><div class="card-header">' + cards[i].name + '</div><div class="card-body"></div></div></div>');
+        var $card = $(`<div class="col-md-2"><div class="card text-white bg-secondary mb-3" style="max-width: 18rem;"><div class="card-header">` + cards[i].name + `</div><div class="card-body"><button class="btn btn-danger" onClick="deleteCardFunc('` + cards[i].id + `')">Delete</button></div></div></div>`);
         $("#" + listName.replace(' ', '')).append($card);
     }
 }
@@ -80,6 +80,21 @@ var addCardFunc = function(title, listID) {
         },
         error: function() {
             console.log('Cannot add card');
+        }
+    });
+}
+
+var deleteCardFunc = function(cardID) {
+    var deleteCardUrl = trelloApiUrl + "cards/" + cardID + "?key=" + apiKey + "&token=" + token;
+    $.ajax({
+        type: "DELETE",
+        async: false,
+        url: deleteCardUrl,
+        success: function() {
+            location.reload()
+        },
+        error: function() {
+            console.log('Cannot delete card');
         }
     });
 }
