@@ -1,7 +1,7 @@
 // Common variables 
 var trelloApiUrl = "https://api.trello.com/1/";
-var apiKey = "3d9105f7e1f1b9861bd282ec7693fc50";
-var token = "3f69d36462cd6b5fb8a99b36c97cc646c5f60a518a1a5c11219c24ee09492b79"
+var apiKey = "<YOUR API KEY>";
+var token = "YOUR API TOKEN"
 
 // Step 1 : Get boards and append it to dropdown 
 var getBoards = function() {
